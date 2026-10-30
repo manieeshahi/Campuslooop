@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CampusLoop Prototype</title>
+<style>
+:root{--pg:#F5F7FF;--pgt:#1B1B3A;--pgm:#5B6478;--navy:#1B1B3A;--blue:#3B82F6;--purp:#8B5CF6;--or:#F97316;--yel:#EAB308;--grn:#22C55E;--ink:#1F2937;--mute:#6B7280;--line:#E5E7EB;--card:#fff;--scr:#F5F7FF;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#12122B;--pgt:#F5F7FF;--pgm:#A5ADC4}}
+:root[data-theme="dark"]{--pg:#12122B;--pgt:#F5F7FF;--pgm:#A5ADC4}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--pg);color:var(--pgt);font-family:"Segoe UI",Calibri,Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:48px;padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px);flex-wrap:wrap}
+.side{max-width:330px}
+.side h1{font-size:44px;margin:0 0 8px;line-height:1}
+.side p{color:var(--pgm);font-size:16px;line-height:1.5;margin:0 0 12px}
+.side b{color:var(--pgt)}
+.phone{width:100%;max-width:370px;height:min(740px,100%);max-height:740px;background:var(--scr);border:10px solid var(--navy);border-radius:42px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(27,27,58,.35);position:relative;color:var(--ink)}
+.top{background:var(--navy);color:#fff;padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between}
+.top h2{margin:0;font-size:20px}.top small{color:#CADCFC;font-size:12px}
+.live{display:flex;align-items:center;gap:6px;font-size:12px;color:#86EFAC;font-weight:700}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--grn);animation:p 1.4s infinite}
+@keyframes p{50%{opacity:.25}}
+#screen{flex:1;overflow-y:auto;padding:14px}
+.nav{display:flex;background:#fff;border-top:1px solid var(--line)}
+.nav button{flex:1;border:0;background:none;padding:10px 0 12px;font:600 12px inherit;font-family:inherit;color:var(--mute);cursor:pointer}
+.nav button.on{color:var(--purp)}
+.nav button .ic{display:block;font-size:20px;margin-bottom:2px}
+h3{margin:14px 0 8px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:600 13px inherit;font-family:inherit;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--purp);border-color:var(--purp);color:#fff}
+.btn{width:100%;border:0;border-radius:14px;padding:13px;margin-top:16px;font:700 15px inherit;font-family:inherit;background:var(--or);color:#fff;cursor:pointer}
+.btn.alt{background:var(--navy)}.btn.sm{width:auto;margin:0;padding:8px 14px;font-size:13px}
+.btn:focus-visible,.chip:focus-visible,.nav button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:center}
+.card.col{display:block}
+.grow{flex:1;min-width:0}.nm{font-weight:700}.sub{font-size:12px;color:var(--mute)}
+.score{font-weight:800;color:var(--grn);font-size:18px}
+.why{background:#EBDDFF;border-radius:10px;padding:8px 10px;font-size:12px;margin-top:8px;color:#4C1D95}
+.slot{background:#FFF1C9;border:2px dashed var(--yel);border-radius:16px;padding:12px;display:flex;align-items:center;gap:10px;margin-top:14px}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;background:#DCE8FF;color:#1D4ED8}
+.new{background:var(--or);color:#fff;margin-left:6px}
+.pop{animation:pop .5s}@keyframes pop{from{transform:scale(.9);opacity:0}}
+.opt{display:block;width:100%;text-align:left;border:2px solid var(--line);background:#fff;border-radius:14px;padding:12px;margin-bottom:8px;font:600 14px inherit;font-family:inherit;cursor:pointer;color:var(--ink)}
+.opt.ok{background:#DCFCE7;border-color:var(--grn)}.opt.no{background:#FEE2E2;border-color:#EF4444}
+.bar{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--or);transition:width .4s}
+.sb{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.toast{position:absolute;left:14px;right:14px;bottom:76px;background:var(--navy);color:#fff;border-radius:12px;padding:10px 12px;font-size:12px;animation:pop .3s}
+.note{font-size:12px;color:var(--mute);margin-top:12px;text-align:center}
+@media (max-width:520px){body{gap:0;align-items:stretch;padding:0}.side{display:none}.phone{max-width:none;max-height:none;height:100%;border:0;border-radius:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="side">
+  <h1>CampusLoop</h1>
+  <p>Tap through the prototype: pick a mood and a free slot, join a live study room, RSVP to events and battle in a quiz.</p>
+  <p><b>Team Cytrace</b><br>Noida Institute of Engineering &amp; Technology</p>
+  <p>Built for HackBriven with Flutter and Serverpod. This page is a design prototype: matches, events and rivals are simulated here. In the real app, Serverpod streams push these updates live.</p>
+</div>
+<div class="phone" role="application" aria-label="CampusLoop app prototype">
+  <div class="top"><div><h2>CampusLoop</h2><small>Hey Rahul, what’s your day like?</small></div><div class="live"><i></i>LIVE</div></div>
+  <div id="screen"></div>
+  <div id="toast"></div>
+  <nav class="nav">
+    <button data-a="tab" data-v="buddy"><span class="ic">🧠</span>Buddy</button>
+    <button data-a="tab" data-v="events"><span class="ic">📅</span>Events</button>
+    <button data-a="tab" data-v="quiz"><span class="ic">🎮</span>Quiz</button>
+  </nav>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const MOODS={focus:'Deep Focus',together:'Study Together',advice:'Need Advice'};
+const PEERS=[
+ {n:'Riya',sk:['DSA','Maths'],m:['together','advice'],f:[30,45,60],c:'#EC4899',h:'#7C2D12'},
+ {n:'Aarav',sk:['Flutter','DBMS'],m:['focus','together'],f:[30,45],c:'#3B82F6',h:'#1F2937'},
+ {n:'Meera',sk:['DBMS','DSA'],m:['advice'],f:[45,60],c:'#22C55E',h:'#92400E'},
+ {n:'Kabir',sk:['Maths','DSA'],m:['focus'],f:[60],c:'#F97316',h:'#111827'},
+ {n:'Sana',sk:['Flutter','DSA'],m:['together'],f:[30,60],c:'#8B5CF6',h:'#7C2D12'}];
+const EV0=[
+ {id:1,t:'Today, 4:00 PM',title:'Flutter Study Jam',where:'Seminar Hall',going:42,tag:'Workshop'},
+ {id:2,t:'Tonight, 7:30 PM',title:'Inter-year Quiz Night',where:'Auditorium',going:88,tag:'Quiz'},
+ {id:3,t:'Tomorrow, 11:00 AM',title:'Hackathon Team Mixer',where:'Innovation Lab',going:31,tag:'Hackathon'}];
+const EV_NEW=[
+ {title:'Chess on the Canteen Lawn',where:'Canteen Lawn',t:'Starting in 20 min',tag:'Fun'},
+ {title:'DSA Doubt Clinic',where:'Library, Room 2',t:'Starting in 45 min',tag:'Study'},
+ {title:'Open Mic Rehearsal',where:'Music Room',t:'Today, 6:00 PM',tag:'Music'}];
+const Q=[
+ {q:'Which language powers both Flutter and Serverpod?',o:['Java','Dart','Kotlin','Swift'],a:1},
+ {q:'In DBMS, which key uniquely identifies each row?',o:['Foreign key','Primary key','Composite view','Index'],a:1},
+ {q:'What is the time complexity of binary search?',o:['O(n)','O(n²)','O(log n)','O(1)'],a:2},
+ {q:'Which Serverpod feature pushes live updates to the app?',o:['Streaming','Cron jobs','Migrations','Caching'],a:0}];
+const S={tab:'buddy',mood:'together',slot:30,subj:'DSA',matches:null,room:null,events:EV0.slice(),rsvp:{},evIdx:0,
+ quiz:{phase:'lobby',i:0,t:10,sel:null,sc:{you:0,Aarav:0,Riya:0}}};
+
+function av(c,h,s=44){return `<svg width="${s}" height="${s}" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 48q2-14 18-14t18 14z" fill="${c}" stroke="#1F2937" stroke-width="2"/><circle cx="24" cy="21" r="12" fill="#F5C9A0" stroke="#1F2937" stroke-width="2"/><path d="M12 20q0-13 12-13t12 13q-6-7-12-7t-12 7z" fill="${h}" stroke="#1F2937" stroke-width="2"/><circle cx="20" cy="22" r="1.8" fill="#1F2937"/><circle cx="28" cy="22" r="1.8" fill="#1F2937"/><path d="M19 27q5 5 10 0z" fill="#7F1D1D"/></svg>`}
+function toast(m){const t=$('#toast');t.innerHTML=`<div class="toast">${m}</div>`;clearTimeout(toast.k);toast.k=setTimeout(()=>t.innerHTML='',3200)}
+
+function findMatches(){
+ const r=PEERS.map(p=>{let s=30,why=[];
+  if(p.m.includes(S.mood)){s+=30;why.push('also wants '+MOODS[S.mood])}
+  if(p.sk.includes(S.subj)){s+=25;why.push('strong in '+S.subj)}
+  if(p.f.includes(S.slot)){s+=15;why.push('free for '+S.slot+' min')}
+  return {...p,s,why}}).sort((a,b)=>b.s-a.s).slice(0,3);
+ S.matches=r;S.room=null}
+
+function viewBuddy(){
+ if(S.room){const ps=S.room.members;return `<h3>Live study room · ${S.subj}</h3>
+ <p class="sub">${S.slot} min · ${MOODS[S.mood]} · updates live as people join</p>
+ <div class="card"><div>${av('#F97316','#111827')}</div><div class="grow"><div class="nm">You (Rahul)</div><div class="sub">Host</div></div></div>
+ ${ps.map((p,i)=>`<div class="card ${i==ps.length-1?'pop':''}"><div>${av(p.c,p.h)}</div><div class="grow"><div class="nm">${p.n}</div><div class="sub">${p.sk.join(' · ')}</div></div><span class="tag">joined</span></div>`).join('')}
+ <button class="btn alt" data-a="leave">Leave room</button>`}
+ const mo=Object.entries(MOODS).map(([k,v])=>`<button class="chip ${S.mood==k?'on':''}" data-a="mood" data-v="${k}">${v}</button>`).join('');
+ const sl=[30,45,60].map(v=>`<button class="chip ${S.slot==v?'on':''}" data-a="slot" data-v="${v}">${v} min</button>`).join('');
+ const su=['DSA','DBMS','Flutter','Maths'].map(v=>`<button class="chip ${S.subj==v?'on':''}" data-a="subj" data-v="${v}">${v}</button>`).join('');
+ let res='';
+ if(S.matches)res='<h3>Your best matches</h3>'+S.matches.map(p=>`<div class="card col pop"><div style="display:flex;gap:12px;align-items:center"><div>${av(p.c,p.h)}</div><div class="grow"><div class="nm">${p.n}</div><div class="sub">${p.sk.join(' · ')}</div></div><div class="score">${p.s}%</div></div><div class="why"><b>Why this match:</b> ${p.why.length?p.why.join(', '):'general study overlap'}</div><div style="margin-top:8px;text-align:right"><button class="btn sm" data-a="join" data-v="${p.n}">Start session</button></div></div>`).join('');
+ return `<h3 style="margin-top:0">What’s your mood?</h3><div class="chips">${mo}</div>
+ <h3>How long are you free?</h3><div class="chips">${sl}</div>
+ <h3>What do you want to study?</h3><div class="chips">${su}</div>
+ <button class="btn" data-a="find">Find my study buddy</button>${res}
+ <div class="slot"><div style="font-size:26px">⏳</div><div class="grow"><div class="nm">Empty Slot</div><div class="sub">4 students near the library are free for 30 min</div></div><button class="btn sm alt" data-a="slotjoin">Join</button></div>`}
+
+function viewEvents(){return `<h3 style="margin-top:0">Happening on campus</h3>`+S.events.map((e,i)=>`<div class="card col ${e.fresh?'pop':''}"><span class="tag">${e.tag}</span>${e.fresh?'<span class="tag new">NEW</span>':''}<div class="nm" style="margin-top:6px;font-size:16px">${e.title}</div><div class="sub">${e.t} · ${e.where}</div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px"><span class="sub"><b>${e.going+(S.rsvp[e.title]?1:0)}</b> going</span><button class="btn sm ${S.rsvp[e.title]?'alt':''}" data-a="rsvp" data-v="${e.title}">${S.rsvp[e.title]?'Going ✓':'RSVP'}</button></div></div>`).join('')+'<p class="note">New events appear here as organisers post them.</p>'}
+
+function viewQuiz(){const q=S.quiz;
+ const board=()=>{const e=Object.entries(q.sc).sort((a,b)=>b[1]-a[1]),mx=Math.max(100,...e.map(x=>x[1]));return e.map(([n,v])=>`<div class="sb"><b style="width:56px">${n}</b><div class="grow bar"><i style="width:${v/mx*100}%;${n=='you'?'background:var(--purp)':''}"></i></div><b>${v}</b></div>`).join('')};
+ if(q.phase==='lobby')return `<h3 style="margin-top:0">Quiz battle lobby</h3><div class="card"><div>${av('#3B82F6','#1F2937')}</div><div class="grow"><div class="nm">Aarav</div><div class="sub">Ready</div></div></div><div class="card"><div>${av('#EC4899','#7C2D12')}</div><div class="grow"><div class="nm">Riya</div><div class="sub">Ready</div></div></div><p class="sub">4 questions · 10 seconds each · faster answers score more.</p><button class="btn" data-a="qstart">Start battle</button>`;
+ if(q.phase==='end'){const e=Object.entries(q.sc).sort((a,b)=>b[1]-a[1]),rk=e.findIndex(x=>x[0]==='you')+1;return `<h3 style="margin-top:0">${rk==1?'You won! 🏆':'You finished #'+rk}</h3>${board()}<button class="btn" data-a="qstart">Play again</button>`}
+ const cur=Q[q.i];
+ return `<div style="display:flex;justify-content:space-between"><span class="sub">Question ${q.i+1} of ${Q.length}</span><b style="color:${q.t<4?'#EF4444':'var(--ink)'}">${q.t}s</b></div><div class="bar"><i style="width:${q.t*10}%"></i></div>
+ <h3>${cur.q}</h3>${cur.o.map((o,i)=>`<button class="opt ${q.sel!==null?(i==cur.a?'ok':(i==q.sel?'no':'')):''}" data-a="ans" data-v="${i}" ${q.sel!==null?'disabled':''}>${o}</button>`).join('')}<h3>Live scores</h3>${board()}`}
+
+function render(){
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.tab));
+ const sc=$('#screen'),y=sc.scrollTop;
+ sc.innerHTML=S.tab==='buddy'?viewBuddy():S.tab==='events'?viewEvents():viewQuiz();
+ sc.scrollTop=y}
+
+let bots=[];
+function startQ(){const q=S.quiz,idx=q.i;q.t=10;q.sel=null;bots.forEach(clearTimeout);
+ bots=['Aarav','Riya'].map(n=>setTimeout(()=>{if(q.phase==='play'&&q.i===idx&&Math.random()<.7){q.sc[n]+=100;if(S.tab==='quiz')render()}},1500+Math.random()*6000))}
+function nextQ(){setTimeout(()=>{const q=S.quiz;q.i++;if(q.i>=Q.length){q.phase='end'}else startQ();if(S.tab==='quiz')render()},1300)}
+
+const A={
+ tab:v=>{S.tab=v;render()},
+ mood:v=>{S.mood=v;S.matches=null;render()},slot:v=>{S.slot=+v;S.matches=null;render()},subj:v=>{S.subj=v;S.matches=null;render()},
+ find:()=>{findMatches();render()},
+ join:n=>{const p=S.matches.find(x=>x.n===n);S.room={members:[p]};render();toast('Session started. In the real app, Serverpod streams this list live.')},
+ slotjoin:()=>{S.room={members:[PEERS[1]]};S.matches=null;render();toast('Joined the Empty Slot group. More students are joining…')},
+ leave:()=>{S.room=null;render()},
+ rsvp:v=>{S.rsvp[v]=!S.rsvp[v];render()},
+ qstart:()=>{S.quiz={phase:'play',i:0,t:10,sel:null,sc:{you:0,Aarav:0,Riya:0}};startQ();render()},
+ ans:v=>{const q=S.quiz;if(q.sel!==null)return;q.sel=+v;if(+v===Q[q.i].a)q.sc.you+=100+q.t*5;render();nextQ()}};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t)A[t.dataset.a](t.dataset.v)});
+
+setInterval(()=>{const q=S.quiz;if(q.phase==='play'&&q.sel===null){q.t--;if(q.t<=0){q.sel=-1;nextQ()}if(S.tab==='quiz')render()}},1000);
+setInterval(()=>{if(S.room&&S.room.members.length<4){const pool=PEERS.filter(p=>!S.room.members.includes(p));if(pool.length){S.room.members.push(pool[0]);if(S.tab==='buddy')render();toast(pool[0].n+' joined your room')}}},4500);
+setInterval(()=>{if(S.evIdx<EV_NEW.length){S.events.forEach(e=>e.fresh=false);S.events.unshift({...EV_NEW[S.evIdx++],id:90+S.evIdx,going:3+S.evIdx*4,fresh:true});if(S.tab==='events')render();else toast('New event: '+S.events[0].title)}},11000);
+render();
+</script>
+</body>
+</html>

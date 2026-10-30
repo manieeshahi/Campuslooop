@@ -1,0 +1,6 @@
+{
+  "name": "CampusLoop",
+  "description": "Live campus study buddy matching, peer quiz battles, study streak rewards, and event coordination.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

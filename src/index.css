@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #FBE4D8;
+    color: #190019;
+    -webkit-font-smoothing: antialiased;
+  }
+  #root {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Claymorphic 3D Soft Shadow Utilities based on reference color palette */
+.clay-bg-canvas {
+  background-color: #FBE4D8;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(223, 182, 178, 0.3) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(133, 79, 108, 0.1) 0px, transparent 50%);
+}
+
+.clay-card {
+  background: #FFFFFF;
+  border: 2px solid #F4E2DA;
+  border-radius: 26px;
+  box-shadow: 
+    6px 8px 18px rgba(82, 43, 91, 0.08), 
+    -4px -4px 12px rgba(255, 255, 255, 0.95),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.clay-card-warm {
+  background: linear-gradient(145deg, #FFF7F2 0%, #FBE4D8 100%);
+  border: 2px solid #ECD7CE;
+  border-radius: 26px;
+  box-shadow: 
+    6px 8px 20px rgba(133, 79, 108, 0.12), 
+    -4px -4px 12px rgba(255, 255, 255, 0.9),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.clay-card-purple {
+  background: linear-gradient(145deg, #37185E 0%, #2B124C 100%);
+  border: 2px solid #522B5B;
+  border-radius: 26px;
+  box-shadow: 
+    6px 8px 22px rgba(25, 0, 25, 0.35), 
+    -3px -3px 8px rgba(133, 79, 108, 0.25),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.15);
+}
+
+.clay-pill-btn {
+  background: #FFFFFF;
+  color: #2B124C;
+  border: 2px solid #F0D9D0;
+  box-shadow: 
+    4px 5px 12px rgba(82, 43, 91, 0.09), 
+    -3px -3px 8px rgba(255, 255, 255, 0.9),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-pill-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    5px 7px 14px rgba(82, 43, 91, 0.12), 
+    -3px -3px 8px rgba(255, 255, 255, 1);
+}
+
+.clay-pill-btn-active {
+  background: linear-gradient(135deg, #522B5B 0%, #2B124C 100%);
+  color: #FFFFFF;
+  border: 2px solid #522B5B;
+  box-shadow: 
+    4px 6px 14px rgba(43, 18, 76, 0.3), 
+    -2px -2px 6px rgba(255, 255, 255, 0.2),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.clay-inset-box {
+  background: #F9EBE3;
+  border: 1.5px solid #ECD5CB;
+  box-shadow: 
+    inset 3px 3px 6px rgba(82, 43, 91, 0.07), 
+    inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+}
+
+/* Animations */
+@keyframes pulse-live {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.88);
+  }
+}
+
+.animate-pulse-live {
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-pop {
+  animation: pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float {
+  animation: float 2.5s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+/* 3D Infinity Logo Spinning & Zooming Entrance ('gol ghumta hua aye age ki taraf') */
+@keyframes logoSpinZoomIn {
+  0% {
+    transform: perspective(1000px) scale(0.12) rotateY(720deg) rotateX(40deg) translateZ(-400px);
+    opacity: 0;
+    filter: blur(8px);
+  }
+  65% {
+    transform: perspective(1000px) scale(1.12) rotateY(-20deg) rotateX(10deg) translateZ(60px);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  85% {
+    transform: perspective(1000px) scale(0.96) rotateY(10deg) rotateX(-5deg) translateZ(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) scale(1) rotateY(0deg) rotateX(0deg) translateZ(0px);
+    opacity: 1;
+  }
+}
+
+.animate-spin-zoom-in {
+  animation: logoSpinZoomIn 1.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes logoTapHighFive {
+  0% { transform: perspective(800px) scale(1) rotateY(0deg); }
+  45% { transform: perspective(800px) scale(1.14) rotateY(180deg) rotateX(15deg); }
+  100% { transform: perspective(800px) scale(1) rotateY(360deg); }
+}
+
+.animate-tap-spin {
+  animation: logoTapHighFive 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DFB6B2;
+  border-radius: 9999px;
+}
+
+/* -------------------------------------------------------------
+ * HIGH-CONTRAST DARK MODE THEME PALETTE
+ * Designed for crisp readability, deep carbon canvas, and glowing accents
+ * ------------------------------------------------------------- */
+.dark-theme {
+  background-color: #0A0C12 !important;
+  color: #F8FAFC !important;
+  color-scheme: dark;
+}
+
+.dark-theme.clay-bg-canvas,
+.dark-theme .clay-bg-canvas {
+  background-color: #0A0C12 !important;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 55%),
+    radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.08) 0px, transparent 60%) !important;
+}
+
+.dark-theme .clay-card {
+  background: #141722 !important;
+  border: 2px solid #282E42 !important;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.65), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+  color: #F8FAFC !important;
+}
+
+.dark-theme .clay-card-warm {
+  background: linear-gradient(150deg, #181C28 0%, #11141E 100%) !important;
+  border: 2px solid #2B3248 !important;
+  box-shadow: 
+    0 12px 28px rgba(0, 0, 0, 0.75), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+  color: #F8FAFC !important;
+}
+
+.dark-theme .clay-card-purple {
+  background: linear-gradient(150deg, #221838 0%, #120D22 100%) !important;
+  border: 2px solid #433268 !important;
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.8), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
+}
+
+.dark-theme .clay-pill-btn {
+  background: #1B1F2C !important;
+  color: #F8FAFC !important;
+  border: 2px solid #30374C !important;
+  box-shadow: 
+    0 4px 14px rgba(0, 0, 0, 0.5), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark-theme .clay-pill-btn:hover {
+  background: #232838 !important;
+  border-color: #444E6B !important;
+  transform: translateY(-1px);
+}
+
+.dark-theme .clay-pill-btn-active {
+  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%) !important;
+  color: #FFFFFF !important;
+  border: 2px solid #818CF8 !important;
+  box-shadow: 
+    0 6px 18px rgba(79, 70, 229, 0.45), 
+    inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dark-theme .clay-inset-box {
+  background: #0E1018 !important;
+  border: 1.5px solid #222738 !important;
+  box-shadow: 
+    inset 2px 2px 6px rgba(0, 0, 0, 0.7), 
+    inset -1px -1px 3px rgba(255, 255, 255, 0.05) !important;
+  color: #F1F5F9 !important;
+}
+
+/* Header & Bottom Nav in High-Contrast Dark */
+.dark-theme header {
+  background-color: rgba(16, 18, 27, 0.95) !important;
+  border-bottom-color: rgba(67, 75, 100, 0.5) !important;
+  color: #F8FAFC !important;
+}
+
+.dark-theme nav {
+  background-color: rgba(16, 18, 27, 0.96) !important;
+  border-top-color: rgba(67, 75, 100, 0.5) !important;
+}
+
+/* Text overrides in High-Contrast Dark for readability */
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4 {
+  color: #FFFFFF !important;
+}
+
+.dark-theme .text-\[\#2B124C\] {
+  color: #F8FAFC !important;
+}
+
+.dark-theme .text-\[\#190019\] {
+  color: #F1F5F9 !important;
+}
+
+.dark-theme .text-\[\#522B5B\] {
+  color: #E2E8F0 !important;
+}
+
+.dark-theme .text-\[\#854F6C\] {
+  color: #94A3B8 !important;
+}
+
+.dark-theme .bg-white {
+  background-color: #171A26 !important;
+  color: #F8FAFC !important;
+}
+
+.dark-theme .bg-\[\#FBE4D8\] {
+  background-color: #1E2333 !important;
+}
+
+.dark-theme .border-\[\#DFB6B2\] {
+  border-color: #333C52 !important;
+}
+
+.dark-theme .border-\[\#DFB6B2\]\/40 {
+  border-color: #272C3E !important;
+}
+
+.dark-theme .border-\[\#DFB6B2\]\/60 {
+  border-color: #333C52 !important;
+}
+
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+  background-color: #12141D !important;
+  color: #FFFFFF !important;
+  border-color: #333C52 !important;
+}
